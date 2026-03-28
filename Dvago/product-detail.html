@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Detail - DVAGO</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        .product-detail-page {
+            padding: 2rem 0;
+        }
+
+        .product-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 1024px) {
+            .product-layout {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .product-image-section {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+        }
+
+        .main-image {
+            width: 100%;
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--muted);
+            border-radius: var(--radius);
+        }
+
+        .main-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 1rem;
+        }
+
+        .product-info-section {}
+
+        .product-category {
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+            margin-bottom: 0.5rem;
+        }
+
+        .product-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stars {
+            color: #fbbf24;
+        }
+
+        .product-price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .product-original-price {
+            font-size: 1.25rem;
+            color: var(--muted-foreground);
+            text-decoration: line-through;
+        }
+
+        .product-description {
+            margin: 1.5rem 0;
+            line-height: 1.8;
+            color: var(--muted-foreground);
+        }
+
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .quantity-label {
+            font-weight: 600;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+        }
+
+        .qty-btn {
+            padding: 0.75rem 1rem;
+            background: none;
+            cursor: pointer;
+            font-size: 1.25rem;
+        }
+
+        .qty-value {
+            padding: 0 1.5rem;
+            font-weight: 600;
+        }
+
+        .add-to-cart-large {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary);
+            color: white;
+            border-radius: var(--radius);
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .product-meta {
+            background: var(--muted);
+            padding: 1rem;
+            border-radius: var(--radius);
+            margin-top: 1.5rem;
+        }
+
+        .meta-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+        }
+
+        .related-products {
+            margin-top: 3rem;
+        }
+
+        .related-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header sticky">
+        <div class="announcement-bar">
+            <div class="announcement-ticker">
+                <span>Welcome to DVAGO.pk. For calling and WhatsApp, please use 021-11-11-38246.</span>
+            </div>
+        </div>
+        <div class="top-header container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="index.html">
+                        <h1>D<span class="logo-v">V</span>AGO</h1>
+                        <p class="logo-subtitle">Pharmacy & Wellness Experts</p>
+                    </a>
+                </div>
+                <div class="header-icons">
+                    <a href="index.html"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        </svg></a>
+                    <a href="products.html"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg></a>
+                    <a href="cart.html">
+                        <div class="cart-wrapper">
+                            <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2">
+                                <circle cx="9" cy="21" r="1"></circle>
+                                <circle cx="20" cy="21" r="1"></circle>
+                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                            </svg>
+                            <span class="cart-badge">0</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="product-detail-page">
+            <div class="container">
+                <div class="breadcrumb"
+                    style="font-size: 0.875rem; color: var(--muted-foreground); margin-bottom: 1.5rem;">
+                    <a href="index.html" style="color: var(--primary);">Home</a>
+                    <span> / </span>
+                    <a href="products.html" style="color: var(--primary);">Products</a>
+                    <span> / </span>
+                    <span id="breadcrumbProduct">Product</span>
+                </div>
+
+                <div class="product-layout" id="productDetail">
+                    <!-- Product details will be loaded here -->
+                </div>
+
+                <div class="related-products" id="relatedSection">
+                    <!-- Related products will be loaded here -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>© 2024 DVAGO. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="products-data.js"></script>
+    <script src="cart.js"></script>
+    <script>
+        let currentProduct = null;
+        let quantity = 1;
+
+        function getProductFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            const slug = params.get('slug');
+            return allProducts.find(p => p.slug === slug);
+        }
+
+        function renderProductDetail() {
+            currentProduct = getProductFromUrl();
+            if (!currentProduct) {
+                window.location.href = 'products.html';
+                return;
+            }
+
+            document.title = `${currentProduct.name} - DVAGO`;
+            document.getElementById('breadcrumbProduct').textContent = currentProduct.name;
+
+            const productDetail = document.getElementById('productDetail');
+            productDetail.innerHTML = `
+                <div class="product-image-section">
+                    <div class="main-image">
+                        <img src="${currentProduct.image}" alt="${currentProduct.name}">
+                    </div>
+                </div>
+
+                <div class="product-info-section">
+                    <div class="product-category">${currentProduct.category}</div>
+                    <h1 class="product-title">${currentProduct.name}</h1>
+                    <div class="product-rating">
+                        <span class="stars">${'★'.repeat(Math.floor(currentProduct.rating || 4))}</span>
+                        <span>(${currentProduct.rating || 4.5})</span>
+                    </div>
+                    <div>
+                        <div class="product-price">Rs. ${currentProduct.price.toLocaleString()}</div>
+                        ${currentProduct.originalPrice ? `<div class="product-original-price">Rs. ${currentProduct.originalPrice.toLocaleString()}</div>` : ''}
+                    </div>
+                    <p class="product-description">${currentProduct.description}</p>
+                    
+                    <div class="quantity-selector">
+                        <span class="quantity-label">Quantity:</span>
+                        <div class="quantity-controls">
+                            <button class="qty-btn" onclick="updateQty(-1)">−</button>
+                            <span class="qty-value" id="qtyValue">1</span>
+                            <button class="qty-btn" onclick="updateQty(1)">+</button>
+                        </div>
+                    </div>
+
+                    <button class="add-to-cart-large" onclick="addToCart()">Add to Cart</button>
+
+                    <div class="product-meta">
+                        <div class="meta-item">
+                            <span>Brand:</span>
+                            <span style="font-weight: 600;">${currentProduct.brand || 'N/A'}</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>Availability:</span>
+                            <span style="font-weight: 600; color: var(--primary);">${currentProduct.inStock ? 'In Stock' : 'Out of Stock'}</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>Category:</span>
+                            <span style="font-weight: 600;">${currentProduct.category}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            renderRelatedProducts();
+        }
+
+        function updateQty(change) {
+            quantity = Math.max(1, quantity + change);
+            document.getElementById('qtyValue').textContent = quantity;
+        }
+
+        function addToCart() {
+            if (currentProduct) {
+                cart.addToCart(currentProduct, quantity);
+                quantity = 1;
+                document.getElementById('qtyValue').textContent = quantity;
+            }
+        }
+
+        function renderRelatedProducts() {
+            const related = allProducts
+                .filter(p => p.category === currentProduct.category && p.id !== currentProduct.id)
+                .slice(0, 4);
+
+            if (related.length === 0) return;
+
+            document.getElementById('relatedSection').innerHTML = `
+                <h2 class="related-title">Related Products</h2>
+                <div class="related-grid">
+                    ${related.map(p => `
+                        <div class="product-grid-card" onclick="window.location.href='product-detail.html?slug=${p.slug}'" style="cursor: pointer; background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem;">
+                            <div class="product-grid-image" style="width: 100%; aspect-ratio: 1; background: var(--muted); border-radius: var(--radius); margin-bottom: 0.75rem;">
+                                <img src="${p.image}" alt="${p.name}" style="width: 100%; height: 100%; object-fit: contain; padding: 0.5rem;">
+                            </div>
+                            <h3 style="font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem; min-height: 2.5rem;">${p.name}</h3>
+                            <div style="color: var(--primary); font-weight: 600;">Rs. ${p.price.toLocaleString()}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        document.addEventListener('DOMContentLoaded', renderProductDetail);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Debug Category Filter</title>
+</head>
+
+<body>
+    <h1>Debug Category Filter</h1>
+    <div id="output"></div>
+
+    <script src="products-data.js"></script>
+    <script>
+        const output = document.getElementById('output');
+
+        // Test 1: Check if allProducts is loaded
+        output.innerHTML += `<p><strong>Test 1:</strong> allProducts loaded: ${typeof allProducts !== 'undefined'}</p>`;
+        output.innerHTML += `<p>Total products: ${allProducts ? allProducts.length : 0}</p>`;
+
+        // Test 2: Check unique categories
+        if (allProducts) {
+            const categories = [...new Set(allProducts.map(p => p.category))];
+            output.innerHTML += `<p><strong>Test 2:</strong> Unique categories:</p>`;
+            output.innerHTML += `<ul>${categories.map(c => `<li>"${c}"</li>`).join('')}</ul>`;
+        }
+
+        // Test 3: Filter by "Medicine"
+        const medicineProducts = allProducts.filter(p => p.category === 'Medicine');
+        output.innerHTML += `<p><strong>Test 3:</strong> Products in "Medicine" category: ${medicineProducts.length}</p>`;
+
+        // Test 4: Show first 3 medicine products
+        output.innerHTML += `<p><strong>Test 4:</strong> First 3 Medicine products:</p>`;
+        output.innerHTML += `<ul>${medicineProducts.slice(0, 3).map(p => `<li>${p.name} (category: "${p.category}")</li>`).join('')}</ul>`;
+
+        // Test 5: URL parameter test
+        const urlParams = new URLSearchParams(window.location.search);
+        const categoryParam = urlParams.get('category');
+        output.innerHTML += `<p><strong>Test 5:</strong> URL category parameter: "${categoryParam}"</p>`;
+
+        if (categoryParam) {
+            const filtered = allProducts.filter(p => p.category === categoryParam);
+            output.innerHTML += `<p>Products matching URL category: ${filtered.length}</p>`;
+        }
+    </script>
+</body>
+
+</html>

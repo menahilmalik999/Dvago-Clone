@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Products - DVAGO</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        /* Products Page Specific Styles */
+        .products-page {
+            padding: 2rem 0;
+        }
+
+        .breadcrumb {
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .breadcrumb a {
+            color: var(--primary);
+            transition: opacity 0.2s;
+        }
+
+        .breadcrumb a:hover {
+            opacity: 0.8;
+        }
+
+        .products-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 1024px) {
+            .products-layout {
+                grid-template-columns: 250px 1fr;
+            }
+        }
+
+        /* Filters Sidebar */
+        .filters-sidebar {
+            background-color: var(--background);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            height: fit-content;
+        }
+
+        .filter-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .filter-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--foreground);
+        }
+
+        .filter-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .filter-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+
+        .filter-option input[type="checkbox"],
+        .filter-option input[type="radio"] {
+            width: 1rem;
+            height: 1rem;
+            cursor: pointer;
+        }
+
+        .filter-option label {
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .filter-option:hover label {
+            color: var(--primary);
+        }
+
+        /* Products Header */
+        .products-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .products-count {
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+        }
+
+        .sort-select {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+            background-color: var(--background);
+            cursor: pointer;
+            outline: none;
+        }
+
+        .sort-select:focus {
+            border-color: var(--primary);
+        }
+
+        /* Products Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 640px) {
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+        }
+
+        .product-grid-card {
+            background-color: var(--background);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            transition: box-shadow 0.2s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .product-grid-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-grid-image {
+            width: 100%;
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--muted);
+            border-radius: var(--radius);
+            overflow: hidden;
+            margin-bottom: 0.75rem;
+        }
+
+        .product-grid-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 0.5rem;
+            transition: transform 0.2s;
+        }
+
+        .product-grid-card:hover .product-grid-image img {
+            transform: scale(1.05);
+        }
+
+        .product-grid-name {
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            min-height: 2.5rem;
+        }
+
+        .product-grid-category {
+            font-size: 0.75rem;
+            color: var(--muted-foreground);
+            margin-bottom: 0.5rem;
+        }
+
+        .product-grid-prices {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .product-grid-price {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .product-grid-original-price {
+            color: var(--muted-foreground);
+            text-decoration: line-through;
+            font-size: 0.875rem;
+        }
+
+        .add-to-cart-btn {
+            width: 100%;
+            padding: 0.5rem;
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: opacity 0.2s;
+        }
+
+        .add-to-cart-btn:hover {
+            opacity: 0.9;
+        }
+
+        .mobile-filter-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        @media (min-width: 1024px) {
+            .mobile-filter-btn {
+                display: none;
+            }
+        }
+
+        .filters-sidebar.mobile {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--background);
+            z-index: 100;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        .filters-sidebar.mobile.show {
+            display: block;
+        }
+
+        .close-filters {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 1rem;
+        }
+
+        .close-filters-btn {
+            padding: 0.5rem;
+            background-color: var(--destructive);
+            color: var(--destructive-foreground);
+            border-radius: 50%;
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header id="header" class="header sticky">
+        <!-- Announcement Bar -->
+        <div class="announcement-bar">
+            <div class="announcement-ticker">
+                <span>Welcome to DVAGO.pk. For calling and WhatsApp, please use 021-11-11-38246. Do not trust
+                    unauthorized websites or apps claiming to be Dvago. Stay vigilant!</span>
+            </div>
+        </div>
+
+        <!-- Top Header -->
+        <div class="top-header container">
+            <div class="header-content">
+                <!-- Logo -->
+                <div class="logo">
+                    <a href="index.html">
+                        <h1>D<span class="logo-v">V</span>AGO</h1>
+                        <p class="logo-subtitle">Pharmacy & Wellness Experts</p>
+                    </a>
+                </div>
+
+                <!-- Search Bar Desktop -->
+                <div class="search-bar desktop-only">
+                    <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                    <input type="text" id="searchInput" placeholder='Search for products...'>
+                </div>
+
+                <!-- Icons -->
+                <div class="header-icons">
+                    <a href="index.html">
+                        <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                        </svg>
+                    </a>
+                    <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <path
+                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                        </path>
+                    </svg>
+                    <a href="cart.html">
+                        <div class="cart-wrapper">
+                            <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2">
+                                <circle cx="9" cy="21" r="1"></circle>
+                                <circle cx="20" cy="21" r="1"></circle>
+                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                            </svg>
+                            <span class="cart-badge">0</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Mobile Search -->
+            <div class="search-bar mobile-only">
+                <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+                <input type="text" id="searchInputMobile" placeholder='Search for products...'>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="products-page">
+            <div class="container">
+                <!-- Breadcrumb -->
+                <div class="breadcrumb">
+                    <a href="index.html">Home</a>
+                    <span>/</span>
+                    <span>Products</span>
+                </div>
+
+                <!-- Mobile Filter Button -->
+                <button class="mobile-filter-btn" id="mobileFilterBtn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="4" y1="6" x2="20" y2="6"></line>
+                        <line x1="4" y1="12" x2="20" y2="12"></line>
+                        <line x1="4" y1="18" x2="20" y2="18"></line>
+                    </svg>
+                    Filters
+                </button>
+
+                <div class="products-layout">
+                    <!-- Filters Sidebar -->
+                    <aside class="filters-sidebar" id="filtersSidebar">
+                        <div class="filter-section">
+                            <h3 class="filter-title">Categories</h3>
+                            <div class="filter-options" id="categoryFilters">
+                                <div class="filter-option">
+                                    <input type="checkbox" id="cat-all" value="all" checked>
+                                    <label for="cat-all">All Products</label>
+                                </div>
+                                <div class="filter-option">
+                                    <input type="checkbox" id="cat-medicine" value="Medicine">
+                                    <label for="cat-medicine">Medicine</label>
+                                </div>
+                                <div class="filter-option">
+                                    <input type="checkbox" id="cat-nutrition" value="Nutrition & Supplements">
+                                    <label for="cat-nutrition">Nutrition & Supplements</label>
+                                </div>
+                                <div class="filter-option">
+                                    <input type="checkbox" id="cat-personal" value="Personal Care">
+                                    <label for="cat-personal">Personal Care</label>
+                                </div>
+                                <div class="filter-option">
+                                    <input type="checkbox" id="cat-baby" value="Baby & Mother Care">
+                                    <label for="cat-baby">Baby & Mother Care</label>
+                                </div>
+                                <div class="filter-option">
+                                    <input type="checkbox" id="cat-devices" value="Devices & Support">
+                                    <label for="cat-devices">Devices & Support</label>
+                                </div>
+                                <div class="filter-option">
+                                    <input type="checkbox" id="cat-foods" value="Foods & Beverages">
+                                    <label for="cat-foods">Foods & Beverages</label>
+                                </div>
+                                <div class="filter-option">
+                                    <input type="checkbox" id="cat-otc" value="OTC And Health Need">
+                                    <label for="cat-otc">OTC And Health Need</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="filter-section">
+                            <h3 class="filter-title">Price Range</h3>
+                            <div class="filter-options">
+                                <div class="filter-option">
+                                    <input type="radio" id="price-all" name="price" value="all" checked>
+                                    <label for="price-all">All Prices</label>
+                                </div>
+                                <div class="filter-option">
+                                    <input type="radio" id="price-1" name="price" value="0-500">
+                                    <label for="price-1">Under Rs. 500</label>
+                                </div>
+                                <div class="filter-option">
+                                    <input type="radio" id="price-2" name="price" value="500-1000">
+                                    <label for="price-2">Rs. 500 - 1,000</label>
+                                </div>
+                                <div class="filter-option">
+                                    <input type="radio" id="price-3" name="price" value="1000-3000">
+                                    <label for="price-3">Rs. 1,000 - 3,000</label>
+                                </div>
+                                <div class="filter-option">
+                                    <input type="radio" id="price-4" name="price" value="3000-10000">
+                                    <label for="price-4">Rs. 3,000 - 10,000</label>
+                                </div>
+                                <div class="filter-option">
+                                    <input type="radio" id="price-5" name="price" value="10000-999999">
+                                    <label for="price-5">Above Rs. 10,000</label>
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
+
+                    <!-- Mobile Filters Overlay -->
+                    <aside class="filters-sidebar mobile" id="mobileFiltersSidebar">
+                        <div class="close-filters">
+                            <button class="close-filters-btn" id="closeFiltersBtn">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
+                        </div>
+                        <!-- Same filter content as desktop -->
+                        <div class="filter-section">
+                            <h3 class="filter-title">Categories</h3>
+                            <div class="filter-options">
+                                <div class="filter-option">
+                                    <input type="checkbox" class="mobile-cat-filter" value="all" checked>
+                                    <label>All Products</label>
+                                </div>
+                                <div class="filter-option">
+                                    <input type="checkbox" class="mobile-cat-filter" value="Medicine">
+                                    <label>Medicine</label>
+                                </div>
+                                <div class="filter-option">
+                                    <input type="checkbox" class="mobile-cat-filter" value="Nutrition & Supplements">
+                                    <label>Nutrition & Supplements</label>
+                                </div>
+                                <div class="filter-option">
+                                    <input type="checkbox" class="mobile-cat-filter" value="Personal Care">
+                                    <label>Personal Care</label>
+                                </div>
+                                <div class="filter-option">
+                                    <input type="checkbox" class="mobile-cat-filter" value="Baby & Mother Care">
+                                    <label>Baby & Mother Care</label>
+                                </div>
+                                <div class="filter-option">
+                                    <input type="checkbox" class="mobile-cat-filter" value="Devices & Support">
+                                    <label>Devices & Support</label>
+                                </div>
+                                <div class="filter-option">
+                                    <input type="checkbox" class="mobile-cat-filter" value="Foods & Beverages">
+                                    <label>Foods & Beverages</label>
+                                </div>
+                                <div class="filter-option">
+                                    <input type="checkbox" class="mobile-cat-filter" value="OTC And Health Need">
+                                    <label>OTC And Health Need</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="filter-section">
+                            <h3 class="filter-title">Price Range</h3>
+                            <div class="filter-options">
+                                <div class="filter-option">
+                                    <input type="radio" name="mobile-price" class="mobile-price-filter" value="all"
+                                        checked>
+                                    <label>All Prices</label>
+                                </div>
+                                <div class="filter-option">
+                                    <input type="radio" name="mobile-price" class="mobile-price-filter" value="0-500">
+                                    <label>Under Rs. 500</label>
+                                </div>
+                                <div class="filter-option">
+                                    <input type="radio" name="mobile-price" class="mobile-price-filter"
+                                        value="500-1000">
+                                    <label>Rs. 500 - 1,000</label>
+                                </div>
+                                <div class="filter-option">
+                                    <input type="radio" name="mobile-price" class="mobile-price-filter"
+                                        value="1000-3000">
+                                    <label>Rs. 1,000 - 3,000</label>
+                                </div>
+                                <div class="filter-option">
+                                    <input type="radio" name="mobile-price" class="mobile-price-filter"
+                                        value="3000-10000">
+                                    <label>Rs. 3,000 - 10,000</label>
+                                </div>
+                                <div class="filter-option">
+                                    <input type="radio" name="mobile-price" class="mobile-price-filter"
+                                        value="10000-999999">
+                                    <label>Above Rs. 10,000</label>
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
+
+                    <!-- Products Content -->
+                    <div class="products-content">
+                        <!-- Products Header -->
+                        <div class="products-header">
+                            <div class="products-count" id="productsCount">Showing 55 products</div>
+                            <select class="sort-select" id="sortSelect">
+                                <option value="default">Sort by: Default</option>
+                                <option value="price-low">Price: Low to High</option>
+                                <option value="price-high">Price: High to Low</option>
+                                <option value="name-az">Name: A to Z</option>
+                                <option value="name-za">Name: Z to A</option>
+                            </select>
+                        </div>
+
+                        <!-- Products Grid -->
+                        <div class="products-grid" id="productsGrid">
+                            <!-- Products will be dynamically loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h2 class="footer-logo">D<span class="logo-v">V</span>AGO</h2>
+                    <p class="footer-subtitle">Pharmacy & Wellness Experts</p>
+                    <p class="footer-desc">Pakistan's most trusted pharmacy chain delivering nationwide</p>
+                </div>
+                <div class="footer-col">
+                    <h3 class="footer-heading">Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="products.html">Products</a></li>
+                        <li><a href="brands.html">Brands</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2024 DVAGO. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="products-data.js"></script>
+    <script src="cart.js"></script>
+    <script src="products.js"></script>
+</body>
+
+</html>
